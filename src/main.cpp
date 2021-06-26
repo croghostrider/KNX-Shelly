@@ -329,7 +329,6 @@ void setup()
 
 void loop()
 {
-
     knx.loop();
     if (!knx.configured())
         return;
