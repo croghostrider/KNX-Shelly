@@ -77,6 +77,27 @@ void ReactionToggel()
     Serial.println(value);
 }
 
+void runReaction(const int Reaction)
+{
+    switch (Reaction)
+    {
+        case 1:
+            ReactionTrue();
+            break;
+
+        case 2:
+            ReactionFalse();
+            break;
+
+        case 3:
+            ReactionToggel();
+            break;
+
+        default:
+            break;
+    }
+}
+
 bool startupDelay()
 {
     return !delayCheck(gRuntimeData.startupDelay, StartupDelayValue * 1000);
@@ -239,46 +260,12 @@ void ButtonToggle()
             if (currentButtonState == LOW)
             {                                              // The button might have been pressed or released, this make sure only presses are acted on, not releases
                 Serial.println("Button has been pressed"); // Here you put whatever code you want to take action when the button is pressed
-                switch (OnReactionSelection)
-                {
-
-                    case 1:
-                        ReactionTrue();
-                        break;
-
-                    case 2:
-                        ReactionFalse();
-                        break;
-
-                    case 3:
-                        ReactionToggel();
-                        break;
-
-                    default:
-                        break;
-                }
+                runReaction(OnReactionSelection);
             }
             else
             {
                 Serial.println("Button has been released"); // Here you put whatever code you want to take action when the button is released
-                switch (OffReactionSelection)
-                {
-                    bool value;
-                    case 1:
-                        ReactionTrue();
-                        break;
-
-                    case 2:
-                        ReactionFalse();
-                        break;
-
-                    case 3:
-                        ReactionToggel();
-                        break;
-
-                    default:
-                        break;
-                }
+                runReaction(OffReactionSelection);
             }
         }
     }
