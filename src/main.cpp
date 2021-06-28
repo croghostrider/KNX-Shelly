@@ -32,6 +32,51 @@ void switchCallback(GroupObject &go)
     Serial.println(value);
 }
 
+void ReactionTrue()
+{
+    bool value = true;
+    if (!RelaisDisconnected)
+    {
+        digitalWrite(RELAYPIN, value);
+        KoSwitchStatus.value(value);
+        Serial.print("KoSwitchStatus: ");
+        Serial.println(value);
+    }
+    KoBinaryStaus.value(value);
+    Serial.print("KoBinaryStaus: ");
+    Serial.println(value);
+}
+
+void ReactionFalse()
+{
+    bool value = false;
+    if (!RelaisDisconnected)
+    {
+        digitalWrite(RELAYPIN, value);
+        KoSwitchStatus.value(value);
+        Serial.print("KoSwitchStatus: ");
+        Serial.println(value);
+    }
+    KoBinaryStaus.value(value);
+    Serial.print("KoBinaryStaus: ");
+    Serial.println(value);
+}
+
+void ReactionToggel()
+{
+    bool value = !KoBinaryStaus.value();
+    if (!RelaisDisconnected)
+    {
+        digitalWrite(RELAYPIN, value);
+        KoSwitchStatus.value(value);
+        Serial.print("KoSwitchStatus: ");
+        Serial.println(value);
+    }
+    KoBinaryStaus.value(value);
+    Serial.print("KoBinaryStaus: ");
+    Serial.println(value);
+}
+
 bool startupDelay()
 {
     return !delayCheck(gRuntimeData.startupDelay, StartupDelayValue * 1000);
@@ -196,47 +241,17 @@ void ButtonToggle()
                 Serial.println("Button has been pressed"); // Here you put whatever code you want to take action when the button is pressed
                 switch (OnReactionSelection)
                 {
-                    bool value;
+
                     case 1:
-                        value = true;
-                        if (!RelaisDisconnected)
-                        {
-                            digitalWrite(RELAYPIN, value);
-                            KoSwitchStatus.value(value);
-                            Serial.print("KoSwitchStatus: ");
-                            Serial.println(value);
-                        }
-                        KoBinaryStaus.value(value);
-                        Serial.print("KoBinaryStaus: ");
-                        Serial.println(value);
+                        ReactionTrue();
                         break;
 
                     case 2:
-                        value = false;
-                        if (!RelaisDisconnected)
-                        {
-                            digitalWrite(RELAYPIN, value);
-                            KoSwitchStatus.value(value);
-                            Serial.print("KoSwitchStatus: ");
-                            Serial.println(value);
-                        }
-                        KoBinaryStaus.value(value);
-                        Serial.print("KoBinaryStaus: ");
-                        Serial.println(value);
+                        ReactionFalse();
                         break;
 
                     case 3:
-                        value = !KoBinaryStaus.value();
-                        if (!RelaisDisconnected)
-                        {
-                            digitalWrite(RELAYPIN, value);
-                            KoSwitchStatus.value(value);
-                            Serial.print("KoSwitchStatus: ");
-                            Serial.println(value);
-                        }
-                        KoBinaryStaus.value(value);
-                        Serial.print("KoBinaryStaus: ");
-                        Serial.println(value);
+                        ReactionToggel();
                         break;
 
                     default:
@@ -250,45 +265,15 @@ void ButtonToggle()
                 {
                     bool value;
                     case 1:
-                        value = true;
-                        if (!RelaisDisconnected)
-                        {
-                            digitalWrite(RELAYPIN, value);
-                            KoSwitchStatus.value(value);
-                            Serial.print("KoSwitchStatus: ");
-                            Serial.println(value);
-                        }
-                        KoBinaryStaus.value(value);
-                        Serial.print("KoBinaryStaus: ");
-                        Serial.println(value);
+                        ReactionTrue();
                         break;
 
                     case 2:
-                        value = false;
-                        if (!RelaisDisconnected)
-                        {
-                            digitalWrite(RELAYPIN, value);
-                            KoSwitchStatus.value(value);
-                            Serial.print("KoSwitchStatus: ");
-                            Serial.println(value);
-                        }
-                        KoBinaryStaus.value(value);
-                        Serial.print("KoBinaryStaus: ");
-                        Serial.println(value);
+                        ReactionFalse();
                         break;
 
                     case 3:
-                        value = !KoBinaryStaus.value();
-                        if (!RelaisDisconnected)
-                        {
-                            digitalWrite(RELAYPIN, value);
-                            KoSwitchStatus.value(value);
-                            Serial.print("KoSwitchStatus: ");
-                            Serial.println(value);
-                        }
-                        KoBinaryStaus.value(value);
-                        Serial.print("KoBinaryStaus: ");
-                        Serial.println(value);
+                        ReactionToggel();
                         break;
 
                     default:
@@ -486,7 +471,6 @@ void setup()
 
 void loop()
 {
-
     knx.loop();
     if (!knx.configured())
         return;
