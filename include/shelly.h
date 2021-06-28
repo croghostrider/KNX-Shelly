@@ -5,21 +5,20 @@
 #define SWINPUTPIN 5
 
 // Parameter with single occurance
-#define StartupDelayAlive         knx.paramInt(0)                     // int32_t
-#define StartupDelaySelection     knx.paramWord(4)                    // char*, 2 Byte
-#define Heartbeat                 knx.paramWord(6)                    // char*, 2 Byte
-#define Lock                     (knx.paramByte(10) & 0x80 ) >> 7     // 1 Bit, Bit 7
-#define RelaisDisconnected          (knx.paramByte(10) & 0x40 ) >> 6     // 1 Bit, Bit 6
-#define LongPress                (knx.paramByte(10) & 0x20 ) >> 5     // 1 Bit, Bit 5
-#define InputDefault             (knx.paramByte(10) & 0x10 ) >> 4     // 1 Bit, Bit 4
-#define ShortReaction             knx.paramWord(11)                   // char*, 2 Byte
-#define LongReaction              knx.paramWord(13)                   // char*, 2 Byte
-#define debounceDelay             knx.paramWord(15)                   // char*, 2 Byte 
-#define StartupDelayRestart       knx.paramInt(17)                    // int32_t              
-#define LongPressDelay            knx.paramInt(21)                    // int32_t
-#define OnReaction                knx.paramInt(25)                    // char*, 2 Byte
-#define OffReaction               knx.paramInt(27)                    // char*, 2 Byte
-
+#define Heartbeat                 knx.paramInt(0)                    // int32_t
+#define StartupDelaySelection     knx.paramByte(4)                   // 1 Bit, Bit 7
+#define HeartbeatSelection        knx.paramByte(5)                   // 1 Bit, Bit 7
+#define LockWithFalse            (knx.paramByte(6) & 0x80 ) >> 7     // 1 Bit, Bit 7
+#define RelaisDisconnected       (knx.paramByte(6) & 0x40 ) >> 6     // 1 Bit, Bit 6
+#define LongPress                (knx.paramByte(6) & 0x20 ) >> 5     // 1 Bit, Bit 5
+#define InputDefault             (knx.paramByte(6) & 0x10 ) >> 4     // 1 Bit, Bit 4
+#define ShortReaction             knx.paramByte(7)                   // 1 Bit, Bit 7
+#define LongReaction              knx.paramByte(8)                   // 1 Bit, Bit 7
+#define DebounceDelaySelection    knx.paramByte(9)                   // 1 Bit, Bit 7
+#define StartupDelay              knx.paramByte(10)                  // 1 Bit, Bit 7             
+#define LongPressDelay            knx.paramByte(14)                  // 1 Bit, Bit 7
+#define OnReactionSelection       knx.paramByte(18)                  // 1 Bit, Bit 7
+#define OffReactionSelection      knx.paramByte(19)                  // 1 Bit, Bit 7
 
 
 // Communication objects with single occurance

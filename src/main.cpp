@@ -1,13 +1,28 @@
-
 #include <Arduino.h>
 #include <WiFiManager.h>
 #include <knx.h>
 #include <shelly.h>
 
+int32_t HeartbeatValue;
+int32_t StartupDelayValue;
+
+struct sRuntimeInfo
+{
+    unsigned long startupDelay;
+    unsigned long heartbeatDelay;
+};
+
+sRuntimeInfo gRuntimeData;
+
+bool delayCheck(uint32_t iOldTimer, uint32_t iDuration)
+{
+    return millis() - iOldTimer >= iDuration;
+}
+
 // callback from switch-GO
 void switchCallback(GroupObject &go)
 {
-    if ((KoSwitchLock.value() && Lock == 0) || (!KoSwitchLock.value() && Lock == 1))
+    if ((KoSwitchLock.value() && LockWithFalse == 0) || (!KoSwitchLock.value() && LockWithFalse == 1))
         return;
 
     bool value = KoSwitch.value();
@@ -15,6 +30,153 @@ void switchCallback(GroupObject &go)
     KoSwitchStatus.value(value);
     Serial.print("KoSwitchStatus: ");
     Serial.println(value);
+}
+
+bool startupDelay()
+{
+    return !delayCheck(gRuntimeData.startupDelay, StartupDelayValue * 1000);
+}
+
+void PrintParameters()
+{
+    Serial.print("HeartbeatSelection: ");
+    Serial.println(HeartbeatSelection);
+    Serial.print("Heartbeat: ");
+    Serial.println(Heartbeat);
+    Serial.print("StartupDelaySelection: ");
+    Serial.println(StartupDelaySelection);
+    Serial.print("StartupDelay: ");
+    Serial.println(StartupDelay);
+    Serial.print("LockWithFalse: ");
+    Serial.println(LockWithFalse);
+    Serial.print("RelaisDisconnected: ");
+    Serial.println(RelaisDisconnected);
+
+    Serial.print("LongPress: ");
+    Serial.println(LongPress);
+    Serial.print("InputDefault: ");
+    Serial.println(InputDefault);
+    Serial.print("ShortReaction: ");
+    Serial.println(ShortReaction);
+    Serial.print("LongReaction: ");
+    Serial.println(LongReaction);
+    Serial.print("DebounceDelaySelection: ");
+    Serial.println(DebounceDelaySelection);
+    Serial.print("LongPressDelay: ");
+    Serial.println(LongPressDelay);
+    Serial.print("OnReactionSelection: ");
+    Serial.println(OnReactionSelection);
+    Serial.print("OffReactionSelection: ");
+    Serial.println(OffReactionSelection);
+}
+
+void SetParameters()
+{
+    switch (HeartbeatSelection)
+    {
+        case 0:
+            HeartbeatValue = 0;
+            break;
+
+        case 1:
+            HeartbeatValue = 1;
+            break;
+
+        case 2:
+            HeartbeatValue = 2;
+            break;
+
+        case 5:
+            HeartbeatValue = 5;
+            break;
+
+        case 10:
+            HeartbeatValue = 10;
+            break;
+
+        case 30:
+            HeartbeatValue = 30;
+            break;
+
+        case 60:
+            HeartbeatValue = 60;
+            break;
+
+        case 120:
+            HeartbeatValue = 120;
+            break;
+
+        case 121:
+            HeartbeatValue = 300;
+            break;
+
+        case 122:
+            HeartbeatValue = 600;
+            break;
+
+        case 123:
+            HeartbeatValue = 1800;
+            break;
+
+        case 200:
+            HeartbeatValue = Heartbeat;
+            break;
+
+        default:
+            HeartbeatValue = 0;
+            break;
+    }
+
+    switch (StartupDelaySelection)
+    {
+        case 1:
+            StartupDelayValue = 1;
+            break;
+
+        case 2:
+            StartupDelayValue = 2;
+            break;
+
+        case 5:
+            StartupDelayValue = 5;
+            break;
+
+        case 10:
+            StartupDelayValue = 10;
+            break;
+
+        case 30:
+            StartupDelayValue = 30;
+            break;
+
+        case 60:
+            StartupDelayValue = 60;
+            break;
+
+        case 120:
+            StartupDelayValue = 120;
+            break;
+
+        case 121:
+            StartupDelayValue = 300;
+            break;
+
+        case 122:
+            StartupDelayValue = 600;
+            break;
+
+        case 123:
+            StartupDelayValue = 1800;
+            break;
+
+        case 200:
+            StartupDelayValue = StartupDelay;
+            break;
+
+        default:
+            StartupDelayValue = 0;
+            break;
+    }
 }
 
 void ButtonToggle()
@@ -26,13 +188,13 @@ void ButtonToggle()
 
     if (lastButtonState != currentButtonState)
     { // Checks to see if the button has been pressed or released, at this point the button has not been debounced
-        if (currentMillis - lastMillis >= debounceDelay)
+        if (currentMillis - lastMillis >= DebounceDelaySelection)
         {                                         // Checks to see if the state of the button has been stable for at least bounceTimeout duration
             lastButtonState = currentButtonState; // At this point the button has been debounced, so save the last state
             if (currentButtonState == LOW)
             {                                              // The button might have been pressed or released, this make sure only presses are acted on, not releases
                 Serial.println("Button has been pressed"); // Here you put whatever code you want to take action when the button is pressed
-                switch (OnReaction)
+                switch (OnReactionSelection)
                 {
                     bool value;
                     case 1:
@@ -84,7 +246,7 @@ void ButtonToggle()
             else
             {
                 Serial.println("Button has been released"); // Here you put whatever code you want to take action when the button is released
-                switch (OffReaction)
+                switch (OffReactionSelection)
                 {
                     bool value;
                     case 1:
@@ -157,7 +319,7 @@ void ButtonLongPress()
         }
         else
         {
-            if (currentMillis - lastMillis >= debounceDelay)
+            if (currentMillis - lastMillis >= DebounceDelaySelection)
             { // Checks that at least the debounc time has elapsed since lastMillis was updated
                 if (currentMillis - lastMillis >= LongPressDelay)
                 {                                 // Checks to see if longPressTime has been exceeded
@@ -267,6 +429,7 @@ void ButtonLongPress()
         }
     }
 }
+
 void Button()
 {
     if (LongPress)
@@ -279,6 +442,19 @@ void Button()
     }
 }
 
+void ProcessHeartbeat()
+{
+    // the first heartbeat is send directly after startup delay of the device
+    if (gRuntimeData.heartbeatDelay == 0 || delayCheck(gRuntimeData.heartbeatDelay, Heartbeat * 1000))
+    {
+        // we waited enough, let's send a heartbeat signal
+        KoHeartbeat.value(true);
+
+        gRuntimeData.heartbeatDelay = millis();
+        // The module prints its firmware version to the console
+    }
+}
+
 void setup()
 {
     Serial.begin(115200);
@@ -286,32 +462,11 @@ void setup()
     pinMode(SWINPUTPIN, INPUT_PULLUP);
     pinMode(RELAYPIN, OUTPUT);
     WiFiManager wifiManager;
-    wifiManager.autoConnect("knx-demo");
+    wifiManager.autoConnect("KNX-Shelly");
     knx.readMemory();
     if (knx.configured())
     {
-        Serial.print("StartupDelayAlive: ");
-        Serial.println(StartupDelayAlive);
-        Serial.print("StartupDelaySelection: ");
-        Serial.println(StartupDelaySelection);
-        Serial.print("Heartbeat: ");
-        Serial.println(Heartbeat);
-        Serial.print("Lock: ");
-        Serial.println(Lock);
-        Serial.print("RelaisDisconnected: ");
-        Serial.println(RelaisDisconnected);
-        Serial.print("LongPress: ");
-        Serial.println(LongPress);
-        Serial.print("InputDefault: ");
-        Serial.println(InputDefault);
-        Serial.print("ShortReaction: ");
-        Serial.println(ShortReaction);
-        Serial.print("LongReaction: ");
-        Serial.println(LongReaction);
-        Serial.print("debounceDelay: ");
-        Serial.println(debounceDelay);
-        Serial.print("StartupDelayRestart: ");
-        Serial.println(StartupDelayRestart);
+        PrintParameters();
         // register callback for reset GO
         KoSwitch.callback(switchCallback);
         KoSwitch.dataPointType(Dpt(1, 1));
@@ -321,17 +476,25 @@ void setup()
         KoBinaryStaus.dataPointType(Dpt(1, 1));
         KoBinaryLongStaus.dataPointType(Dpt(1, 1));
 
-        if (Lock == 1)
+        if (LockWithFalse == 1)
             KoSwitchLock.value(true);
+
+        SetParameters();
     }
     knx.start();
 }
 
 void loop()
 {
+
     knx.loop();
     if (!knx.configured())
         return;
+
+    if (startupDelay())
+        return;
+
+    ProcessHeartbeat();
 
     Button();
 }
