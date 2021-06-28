@@ -3,8 +3,13 @@
 #include <knx.h>
 #include <shelly.h>
 
-int32_t HeartbeatValue;
-int32_t StartupDelayValue;
+struct sParameters
+{
+    int32_t HeartbeatValue;
+    int32_t StartupDelayValue;
+};
+
+sParameters gParameters;
 
 struct sRuntimeInfo
 {
@@ -98,9 +103,67 @@ void runReaction(const int Reaction)
     }
 }
 
+uint32_t setSeletionValue(uint8_t SelectionParameter)
+{
+    switch (SelectionParameter)
+    {
+        case 0:
+            return 0;
+            break;
+
+        case 1:
+            return 1;
+            break;
+
+        case 2:
+            return 2;
+            break;
+
+        case 5:
+            return 5;
+            break;
+
+        case 10:
+            return 10;
+            break;
+
+        case 30:
+            return 30;
+            break;
+
+        case 60:
+            return 60;
+            break;
+
+        case 120:
+            return 120;
+            break;
+
+        case 121:
+            return 300;
+            break;
+
+        case 122:
+            return 600;
+            break;
+
+        case 123:
+            return 1800;
+            break;
+
+        case 200:
+            return Heartbeat;
+            break;
+
+        default:
+            return 0;
+            break;
+    }
+}
+
 bool startupDelay()
 {
-    return !delayCheck(gRuntimeData.startupDelay, StartupDelayValue * 1000);
+    return !delayCheck(gRuntimeData.startupDelay, gParameters.StartupDelayValue * 1000);
 }
 
 void PrintParameters()
@@ -138,111 +201,8 @@ void PrintParameters()
 
 void SetParameters()
 {
-    switch (HeartbeatSelection)
-    {
-        case 0:
-            HeartbeatValue = 0;
-            break;
-
-        case 1:
-            HeartbeatValue = 1;
-            break;
-
-        case 2:
-            HeartbeatValue = 2;
-            break;
-
-        case 5:
-            HeartbeatValue = 5;
-            break;
-
-        case 10:
-            HeartbeatValue = 10;
-            break;
-
-        case 30:
-            HeartbeatValue = 30;
-            break;
-
-        case 60:
-            HeartbeatValue = 60;
-            break;
-
-        case 120:
-            HeartbeatValue = 120;
-            break;
-
-        case 121:
-            HeartbeatValue = 300;
-            break;
-
-        case 122:
-            HeartbeatValue = 600;
-            break;
-
-        case 123:
-            HeartbeatValue = 1800;
-            break;
-
-        case 200:
-            HeartbeatValue = Heartbeat;
-            break;
-
-        default:
-            HeartbeatValue = 0;
-            break;
-    }
-
-    switch (StartupDelaySelection)
-    {
-        case 1:
-            StartupDelayValue = 1;
-            break;
-
-        case 2:
-            StartupDelayValue = 2;
-            break;
-
-        case 5:
-            StartupDelayValue = 5;
-            break;
-
-        case 10:
-            StartupDelayValue = 10;
-            break;
-
-        case 30:
-            StartupDelayValue = 30;
-            break;
-
-        case 60:
-            StartupDelayValue = 60;
-            break;
-
-        case 120:
-            StartupDelayValue = 120;
-            break;
-
-        case 121:
-            StartupDelayValue = 300;
-            break;
-
-        case 122:
-            StartupDelayValue = 600;
-            break;
-
-        case 123:
-            StartupDelayValue = 1800;
-            break;
-
-        case 200:
-            StartupDelayValue = StartupDelay;
-            break;
-
-        default:
-            StartupDelayValue = 0;
-            break;
-    }
+    gParameters.HeartbeatValue = setSeletionValue (HeartbeatSelection);
+    gParameters.StartupDelayValue = setSeletionValue (StartupDelaySelection);
 }
 
 void ButtonToggle()
