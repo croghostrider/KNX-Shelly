@@ -1,0 +1,12 @@
+name: PlatformIO CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1

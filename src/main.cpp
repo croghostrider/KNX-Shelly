@@ -151,10 +151,6 @@ uint32_t setSeletionValue(uint8_t SelectionParameter)
             return 1800;
             break;
 
-        case 200:
-            return Heartbeat;
-            break;
-
         default:
             return 0;
             break;
@@ -201,8 +197,13 @@ void PrintParameters()
 
 void SetParameters()
 {
-    gParameters.HeartbeatValue = setSeletionValue (HeartbeatSelection);
-    gParameters.StartupDelayValue = setSeletionValue (StartupDelaySelection);
+    gParameters.HeartbeatValue = setSeletionValue(HeartbeatSelection);
+    gParameters.StartupDelayValue = setSeletionValue(StartupDelaySelection);
+    if (HeartbeatSelection == 200)
+        gParameters.HeartbeatValue = Heartbeat;
+
+    if (StartupDelaySelection == 200)
+        gParameters.StartupDelayValue = StartupDelay;
 }
 
 void ButtonToggle()
