@@ -37,24 +37,18 @@ void switchCallback(GroupObject &go)
     Serial.println(value);
 }
 
-void ReactionTrue()
+void ReactionFuntion(bool isToggel, bool valueFuntion, bool isLong)
 {
-    bool value = true;
-    if (!RelaisDisconnected)
+    bool value;
+    if (isToggel)
     {
-        digitalWrite(RELAYPIN, value);
-        KoSwitchStatus.value(value);
-        Serial.print("KoSwitchStatus: ");
-        Serial.println(value);
+        value = !KoBinaryStaus.value();
     }
-    KoBinaryStaus.value(value);
-    Serial.print("KoBinaryStaus: ");
-    Serial.println(value);
-}
+    else
+    {
+        value = valueFuntion;
+    }
 
-void ReactionFalse()
-{
-    bool value = false;
     if (!RelaisDisconnected)
     {
         digitalWrite(RELAYPIN, value);
@@ -62,24 +56,18 @@ void ReactionFalse()
         Serial.print("KoSwitchStatus: ");
         Serial.println(value);
     }
-    KoBinaryStaus.value(value);
-    Serial.print("KoBinaryStaus: ");
-    Serial.println(value);
-}
-
-void ReactionToggel()
-{
-    bool value = !KoBinaryStaus.value();
-    if (!RelaisDisconnected)
+    if (isLong)
     {
-        digitalWrite(RELAYPIN, value);
-        KoSwitchStatus.value(value);
-        Serial.print("KoSwitchStatus: ");
+        KoBinaryLongStaus.value(value);
+        Serial.print("KoBinaryLongStaus: ");
         Serial.println(value);
     }
-    KoBinaryStaus.value(value);
-    Serial.print("KoBinaryStaus: ");
-    Serial.println(value);
+    else
+    {
+        KoBinaryStaus.value(value);
+        Serial.print("KoBinaryStaus: ");
+        Serial.println(value);
+    }
 }
 
 void runReaction(const int Reaction)
@@ -87,15 +75,15 @@ void runReaction(const int Reaction)
     switch (Reaction)
     {
         case 1:
-            ReactionTrue();
+            ReactionFuntion(false, true, false);
             break;
 
         case 2:
-            ReactionFalse();
+            ReactionFuntion(false, false, false);
             break;
 
         case 3:
-            ReactionToggel();
+            ReactionFuntion(true, false, false);
             break;
 
         default:
@@ -259,47 +247,16 @@ void ButtonLongPress()
                     Serial.println("Long press"); // LongPressTime has been exceeded
                     switch (LongReaction)
                     {
-                        bool value;
                         case 1:
-                            value = true;
-                            if (!RelaisDisconnected)
-                            {
-                                digitalWrite(RELAYPIN, value);
-                                KoSwitchStatus.value(value);
-                                Serial.print("KoSwitchStatus: ");
-                                Serial.println(value);
-                            }
-                            KoBinaryLongStaus.value(value);
-                            Serial.print("KoBinaryLongStaus: ");
-                            Serial.println(value);
+                            ReactionFuntion(false, true, true);
                             break;
 
                         case 2:
-                            value = false;
-                            if (!RelaisDisconnected)
-                            {
-                                digitalWrite(RELAYPIN, value);
-                                KoSwitchStatus.value(value);
-                                Serial.print("KoSwitchStatus: ");
-                                Serial.println(value);
-                            }
-                            KoBinaryLongStaus.value(value);
-                            Serial.print("KoBinaryLongStaus: ");
-                            Serial.println(value);
+                            ReactionFuntion(false, false, true);
                             break;
 
                         case 3:
-                            value = !KoBinaryLongStaus.value();
-                            if (!RelaisDisconnected)
-                            {
-                                digitalWrite(RELAYPIN, value);
-                                KoSwitchStatus.value(value);
-                                Serial.print("KoSwitchStatus: ");
-                                Serial.println(value);
-                            }
-                            KoBinaryLongStaus.value(value);
-                            Serial.print("KoBinaryLongStaus: ");
-                            Serial.println(value);
+                            ReactionFuntion(true, false, true);
                             break;
 
                         default:
@@ -313,45 +270,15 @@ void ButtonLongPress()
                     {
                         bool value;
                         case 1:
-                            value = true;
-                            if (!RelaisDisconnected)
-                            {
-                                digitalWrite(RELAYPIN, value);
-                                KoSwitchStatus.value(value);
-                                Serial.print("KoSwitchStatus: ");
-                                Serial.println(value);
-                            }
-                            KoBinaryStaus.value(value);
-                            Serial.print("KoBinaryStaus: ");
-                            Serial.println(value);
+                            ReactionFuntion(false, true, false);
                             break;
 
                         case 2:
-                            value = false;
-                            if (!RelaisDisconnected)
-                            {
-                                digitalWrite(RELAYPIN, value);
-                                KoSwitchStatus.value(value);
-                                Serial.print("KoSwitchStatus: ");
-                                Serial.println(value);
-                            }
-                            KoBinaryStaus.value(value);
-                            Serial.print("KoBinaryStaus: ");
-                            Serial.println(value);
+                            ReactionFuntion(false, false, false);
                             break;
 
                         case 3:
-                            value = !KoBinaryStaus.value();
-                            if (!RelaisDisconnected)
-                            {
-                                digitalWrite(RELAYPIN, value);
-                                KoSwitchStatus.value(value);
-                                Serial.print("KoSwitchStatus: ");
-                                Serial.println(value);
-                            }
-                            KoBinaryStaus.value(value);
-                            Serial.print("KoBinaryStaus: ");
-                            Serial.println(value);
+                            ReactionFuntion(true, false, false);
                             break;
 
                         default:

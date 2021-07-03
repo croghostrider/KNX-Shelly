@@ -24,4 +24,3 @@ AllowShortFunctionsOnASingleLine: InlineOnly
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
 UseTab: Never
-...
