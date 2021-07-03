@@ -268,7 +268,6 @@ void ButtonLongPress()
                     Serial.println("Short press"); // LongPressTime has not been exceeded
                     switch (ShortReaction)
                     {
-                        bool value;
                         case 1:
                             ReactionFuntion(false, true, false);
                             break;
