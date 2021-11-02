@@ -17,8 +17,8 @@
 #define DebounceDelaySelection    knx.paramByte(9)                   // 1 Bit, Bit 7
 #define StartupDelay              knx.paramByte(10)                  // 1 Bit, Bit 7             
 #define LongPressDelay            knx.paramByte(14)                  // 1 Bit, Bit 7
-#define OnReactionSelection       knx.paramByte(18)                  // 1 Bit, Bit 7
-#define OffReactionSelection      knx.paramByte(19)                  // 1 Bit, Bit 7
+#define OnReaction                knx.paramByte(15)                  // 1 Bit, Bit 7
+#define OffReaction               knx.paramByte(16)                  // 1 Bit, Bit 7
 
 
 // Communication objects with single occurance

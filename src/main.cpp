@@ -177,10 +177,6 @@ void PrintParameters()
     Serial.println(DebounceDelaySelection);
     Serial.print("LongPressDelay: ");
     Serial.println(LongPressDelay);
-    Serial.print("OnReactionSelection: ");
-    Serial.println(OnReactionSelection);
-    Serial.print("OffReactionSelection: ");
-    Serial.println(OffReactionSelection);
 }
 
 void SetParameters()
@@ -209,12 +205,12 @@ void ButtonToggle()
             if (currentButtonState == LOW)
             {                                              // The button might have been pressed or released, this make sure only presses are acted on, not releases
                 Serial.println("Button has been pressed"); // Here you put whatever code you want to take action when the button is pressed
-                runReaction(OnReactionSelection);
+                runReaction(OnReaction);
             }
             else
             {
                 Serial.println("Button has been released"); // Here you put whatever code you want to take action when the button is released
-                runReaction(OffReactionSelection);
+                runReaction(OffReaction);
             }
         }
     }
@@ -245,23 +241,7 @@ void ButtonLongPress()
                 if (currentMillis - lastMillis >= LongPressDelay)
                 {                                 // Checks to see if longPressTime has been exceeded
                     Serial.println("Long press"); // LongPressTime has been exceeded
-                    switch (LongReaction)
-                    {
-                        case 1:
-                            ReactionFuntion(false, true, true);
-                            break;
-
-                        case 2:
-                            ReactionFuntion(false, false, true);
-                            break;
-
-                        case 3:
-                            ReactionFuntion(true, false, true);
-                            break;
-
-                        default:
-                            break;
-                    }
+                    runReaction(LongReaction);
                 }
                 else
                 {
